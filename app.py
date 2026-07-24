@@ -14,14 +14,15 @@ st.markdown("已實裝 **V06.1 四重法人防衛網**：**VIX恐慌感知**、*
 # --- 2. 側邊欄控制台 ---
 st.sidebar.header("⚙️ 全自動大掃描設定")
 
-GSHEET_URL = "https://docs.google.com/spreadsheets/d/1YuF63YTtUfzGQ70Wu1Bc_xSF9VxBAfFQGYHdP6-WUFk/edit?usp=drive_link"
+# 🟢 已更新：美股專屬 Google 試算表網址
+GSHEET_URL = "https://docs.google.com/spreadsheets/d/1491qc1Y59PwCOWaPZblpAieR0_iCI-7KKLtZUuG7Qe4/edit?usp=sharing"
 
-# 🟢 已預填解析完成的 Google 表單神奇密碼 (可依個人表單彈性調整)
-GOOGLE_FORM_ID = "1FAIpQLSfFyZVyj0gvInJomErH1shWrIClFF1CEjWKXtQJYkzxSgRcEg"
-ENTRY_TICKER_ID = "entry.40654407"
-ENTRY_NAME_ID = "entry.1671985547"
+# 🟢 已更新：美股專屬 Google 表單密碼與欄位 ID
+GOOGLE_FORM_ID = "1FAIpQLSdpLHywd-HysLTMbGpuEByQwEaoVaqtvTW0Uwav136m-kIDfQ"
+ENTRY_TICKER_ID = "entry.2146824153"
+ENTRY_NAME_ID = "entry.1673006020"
 
-# 🟢 修正防護版：同時讀取試算表 A 欄 (代號) 與 B 欄 (中文名稱/自訂備註)，100% 避開 NaN 轉小寫崩潰
+# 🟢 修正防護版：同時讀取試算表 A 欄 (代號) 與 B 欄 (產業/自訂備註)，100% 避開 NaN 轉小寫崩潰
 @st.cache_data(ttl=60)
 def get_tickers_from_sheet(url):
     try:
@@ -466,10 +467,10 @@ with tab_summary:
         styled_df = df_res.style.apply(apply_block_shading, axis=None)
         st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
-# 🟢 雙向自選股寫入分頁 (美股版)
+# 🟢 雙向自選股寫入分頁 (美股專屬新表單)
 with tab_manage:
     st.header("➕ 線上新增美股至雲端清單")
-    st.markdown("填寫下方欄位按下送出，系統將會**自動寫入你的 Google 試算表**，60 秒內全自動同步！")
+    st.markdown("填寫下方欄位按下送出，系統將會**自動寫入你的美股 Google 試算表**，60 秒內全自動同步！")
     
     with st.form("add_us_stock_form"):
         new_ticker = st.text_input("🎯 美股代號 (例如: NVDA 或 TSLA)", placeholder="NVDA").strip().upper()
@@ -491,7 +492,7 @@ with tab_manage:
                 try:
                     res = requests.post(form_url, data=form_data, headers=headers)
                     if res.status_code == 200:
-                        st.success(f"🎉 成功寫入！已將 【{new_ticker} - {new_name}】 自動新增至雲端試算表！")
+                        st.success(f"🎉 成功寫入！已將 【{new_ticker} - {new_name}】 自動新增至美股雲端試算表！")
                         st.info("💡 請等待 60 秒快取更新，或至左側選單重新載入，即可在美股矩陣中看到新股票！")
                     else:
                         st.error(f"⚠️ 寫入失敗！Google 伺服器回應代碼：[{res.status_code}]")
